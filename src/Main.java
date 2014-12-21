@@ -19,15 +19,20 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+
+
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JPanel;
+import javax.swing.JPanel;import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
+
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
 
 /**********************************************************
  * Class: Main
  * Purpose: Sets up and runs the main program
 **********************************************************/
+//JMenu maze, double chanceToFork, int levelToIndent, boolean correctPath, int maxItems
 
 public class Main {
 	
@@ -37,6 +42,11 @@ public class Main {
 	static final int LIMIT_X = 50;
 	static final int LIMIT_Y = 30;
 	static JPanel mainPanel;
+	static JMenu maze;
+	static final double INIT_CHANCE_TO_FORK = .2;
+	static final int INIT_LEVEL_TO_INDENT = 5, INIT_MAX_ITEMS = 10;
+	static final boolean INIT_CORRECT_PATH = true;
+	
 
 	public static void main(String[] args){
 		
@@ -61,9 +71,9 @@ public class Main {
 		frame.getContentPane().add(menuBar, c);
 		
 		// Setup maze
-		JMenu maze = new JMenu("Maze");
+		maze = new JMenu("Maze");
 		maze.setMnemonic('M');
-		MazeGenerator.generate(maze, .2, 5, true, 10);
+		MazeGenerator.generate(maze, INIT_CHANCE_TO_FORK, INIT_LEVEL_TO_INDENT, INIT_CORRECT_PATH, INIT_MAX_ITEMS);
 		menuBar.add(maze);
 		
 		// Setup ABOUT menu
@@ -117,6 +127,43 @@ public class Main {
 		frame.setVisible(true);
 		
 	}
+	
+	 public static void regenMaze(){
+
+		 // Clear maze
+		 maze.removeAll();
+		  
+		 // Level settings
+		 double cToFork;
+		 int lToIndent;
+		 int mItems;
+		 
+		 cToFork = INIT_CHANCE_TO_FORK + level * .01;
+	
+		 // Make sure user does not go past x limit
+		 if((INIT_LEVEL_TO_INDENT  + level) > LIMIT_X){
+			  lToIndent = LIMIT_X;
+		 }
+		 
+		 // Calculate indents as normal!!
+		 else{ 
+			  lToIndent = (int) (INIT_LEVEL_TO_INDENT  + level);
+		 }
+			 
+		 // Make sure user does not go past x limit
+		 if(INIT_MAX_ITEMS + (int)(level/3) > LIMIT_Y){
+			 mItems = LIMIT_Y;
+		 }
+		 
+		 // Calculate indents as normal
+		 else{
+			 
+			 mItems = (INIT_MAX_ITEMS + (int)(level/3));
+		 }
+		 
+		 MazeGenerator.generate(maze, cToFork, lToIndent, true, mItems);
+	 }
+	
 	
 	
 }

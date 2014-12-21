@@ -1,3 +1,5 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Random;
 
 import javax.swing.JMenu;
@@ -8,9 +10,25 @@ public class MazeGenerator {
 	public static void generate(JMenu maze, double chanceToFork, int levelToIndent, boolean correctPath, int maxItems){
 		
 		// Base case
-		if(levelToIndent == 0)
+		if(levelToIndent == 0){
+			
+			JMenuItem nextLevel = new JMenuItem("Next level");
+			maze.add(nextLevel);
+			
+			nextLevel.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+				Main.level++;
+				Main.mainPanel.repaint();
+				Main.regenMaze();
+					
+				}
+			});
+			
+			
 			return;
-		
+		}
 		// Decide number of items
 		Random randItems = new Random();
 		int items = randItems.nextInt(maxItems) + 2;
